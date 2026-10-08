@@ -1,0 +1,14 @@
+[Unit]
+Description=EC2 Log Shipper to AWS CloudWatch
+# Start only after the network is available.
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ec2logshipper -config /etc/search-tool-ec2logshipper/config.json
+Restart=on-failure
+User=root
+
+[Install]
+# Enable the service for the normal multi-user boot target.
+WantedBy=multi-user.target

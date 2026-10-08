@@ -1,0 +1,40 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
+# Unignore build files
+!Makefile
+!VERSION
+
+# Unignore
+!CODEOWNERS
+
+# Ignore build artifacts
+/build/
+
+# Ignore editor backup
+*~
+
+# Ignore ansible retry
+*.retry
+
+# Ignore .idea
+.idea
+.vscode
+
+# Ingore csvs
+*.csv
+
+.terraform*
+*.gz
+
+# ignore credentials
+git_login.json
+
+#ignore terraform
+.terraform*

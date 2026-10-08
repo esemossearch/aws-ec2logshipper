@@ -1,0 +1,13 @@
+{
+  "log_file": "/var/log/messages",
+  "log_group": "/ec2/application",
+  "log_stream": "",
+  "timestamp_layout": "Jan 02 15:04:05",
+  "timestamp_regex": "^(\\w{3} \\d{1,2} \\d{2}:\\d{2}:\\d{2})",
+  "region": "us-east-1",
+  "imdsv2": true,
+  "batch_max_size": 100,
+  "flush_interval_ms": 500,
+  "create_log_group": true,
+  "create_log_stream": true
+}

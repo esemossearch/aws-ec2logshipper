@@ -1,0 +1,163 @@
+version: 2
+registries:
+  esemos-github:
+    type: "git"
+    url: "https://github.com/"
+    username: "oauth2"
+    password: "${{ secrets.ESEMOS_GITHUB }}"
+  github:
+    type: "git"
+    url: "https://github.com/"
+    username: "x-access-token"
+    password: "${{ secrets.SEARCH_ACCESS_TOKEN }}"
+
+updates:
+  #Go Dependency Check
+  #aws-ready
+  - directory: "/"
+    open-pull-requests-limit: 5
+    package-ecosystem: "gomod"
+    rebase-strategy: "auto"
+    registries: "*"
+    assignees:
+      - "semantosoph"
+      - "AschoEse"
+    schedule:
+      interval: "cron"
+      cronjob: "0 3 1,15 * *"
+    cooldown:
+      default-days: 8
+    groups:
+      gomod-dependencies:
+        patterns:
+          - "*"
+  #aws-prod
+  - directory: "/"
+    open-pull-requests-limit: 5
+    package-ecosystem: "gomod"
+    rebase-strategy: "auto"
+    registries: "*"
+    assignees:
+      - "semantosoph"
+      - "AschoEse"
+    schedule:
+      interval: "cron"
+      cronjob: "0 3 1,15 * *"
+    cooldown:
+      default-days: 8
+    groups:
+      gomod-dependencies:
+        patterns:
+          - "*"
+    target-branch: "aws-prod"
+
+  #Docker Version Check
+  #aws-ready
+  - directory: "/"
+    open-pull-requests-limit: 5
+    package-ecosystem: "docker"
+    rebase-strategy: "auto"
+    assignees:
+      - "semantosoph"
+      - "AschoEse"
+    schedule:
+      interval: "cron"
+      cronjob: "0 4 1,15 * *"
+    cooldown:
+      default-days: 8
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
+  #aws-prod
+  - directory: "/"
+    open-pull-requests-limit: 5
+    package-ecosystem: "docker"
+    rebase-strategy: "auto"
+    assignees:
+      - "semantosoph"
+      - "AschoEse"
+    schedule:
+      interval: "cron"
+      cronjob: "0 4 1,15 * *"
+    cooldown:
+      default-days: 8
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
+    target-branch: "aws-prod"
+
+  #Terraform Version Check
+  #aws-ready
+  - directory: "/terraform"
+    open-pull-requests-limit: 5
+    package-ecosystem: "terraform"
+    rebase-strategy: "auto"
+    assignees:
+      - "DKlug1337"
+      - "semantosoph"
+    schedule:
+      interval: "cron"
+      cronjob: "0 5 1,15 * *"
+    cooldown:
+      default-days: 8
+    groups:
+      terraform-dependencies:
+        patterns:
+          - "*"
+  #aws-prod
+  - directory: "/terraform"
+    open-pull-requests-limit: 5
+    package-ecosystem: "terraform"
+    rebase-strategy: "auto"
+    assignees:
+      - "DKlug1337"
+      - "semantosoph"
+    schedule:
+      interval: "cron"
+      cronjob: "0 5 1,15 * *"
+    cooldown:
+      default-days: 8
+    groups:
+      terraform-dependencies:
+        patterns:
+          - "*"
+    target-branch: "aws-prod"
+
+  #Github-Actions Version Check
+  #aws-ready
+  - directory: "/"
+    package-ecosystem: "github-actions"
+    open-pull-requests-limit: 5
+    rebase-strategy: "auto"
+    assignees:
+      - "DKlug1337"
+      - "AschoEse"
+    schedule:
+      interval: "cron"
+      cronjob: "0 6 1,15 * *"
+    cooldown:
+      default-days: 8
+    groups:
+      github-actions-dependencies:
+        patterns:
+          - "*"
+  #aws-prod
+  - directory: "/"
+    package-ecosystem: "github-actions"
+    open-pull-requests-limit: 5
+    rebase-strategy: "auto"
+    assignees:
+      - "DKlug1337"
+      - "AschoEse"
+    schedule:
+      interval: "cron"
+      cronjob: "0 6 1,15 * *"
+    cooldown:
+      default-days: 8
+    groups:
+      github-actions-dependencies:
+        patterns:
+          - "*"
+    target-branch: "aws-prod"
