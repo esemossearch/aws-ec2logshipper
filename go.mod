@@ -1,4 +1,4 @@
-module search-tool-ec2logshipper
+module aws-ec2logshipper
 
 go 1.26
 

@@ -1,6 +1,6 @@
-# search-tool-ec2logshipper
+# aws-ec2logshipper
 
-`search-tool-ec2logshipper` is a small daemon that tails a local log file on an
+`aws-ec2logshipper` is a small daemon that tails a local log file on an
 EC2 instance and forwards each line to AWS CloudWatch Logs. It parses
 timestamps from log lines, batches events, and sends them through the AWS SDK
 for Go v2.
@@ -40,13 +40,13 @@ go build -o ec2logshipper .
 Copy the example configuration and edit it for your environment:
 
 ```bash
-sudo mkdir -p /etc/search-tool-ec2logshipper
-sudo cp config.json.example /etc/search-tool-ec2logshipper/config.json
-# edit /etc/search-tool-ec2logshipper/config.json
-./ec2logshipper -config /etc/search-tool-ec2logshipper/config.json
+sudo mkdir -p /etc/aws-ec2logshipper
+sudo cp config.json.example /etc/aws-ec2logshipper/config.json
+# edit /etc/aws-ec2logshipper/config.json
+./ec2logshipper -config /etc/aws-ec2logshipper/config.json
 ```
 
-The binary defaults to `-config /etc/search-tool-ec2logshipper/config.json`.
+The binary defaults to `-config /etc/aws-ec2logshipper/config.json`.
 
 ## Test log generator
 
@@ -69,25 +69,25 @@ make rpm
 
 Artifacts are written to:
 
-- `build/rpmbuild/RPMS/x86_64/search-tool-ec2logshipper-<version>-1.x86_64.rpm`
-- `build/rpmbuild/SRPMS/search-tool-ec2logshipper-<version>-1.src.rpm`
+- `build/rpmbuild/RPMS/x86_64/aws-ec2logshipper-<version>-1.x86_64.rpm`
+- `build/rpmbuild/SRPMS/aws-ec2logshipper-<version>-1.src.rpm`
 
 To bump the version, edit `VERSION` and run `make rpm` again.
 
 ## Install the RPM
 
 ```bash
-sudo rpm -ivh build/rpmbuild/RPMS/x86_64/search-tool-ec2logshipper-0.1.0-1.x86_64.rpm
-sudo systemctl enable search-tool-ec2logshipper
-sudo systemctl start search-tool-ec2logshipper
-sudo systemctl status search-tool-ec2logshipper
+sudo rpm -ivh build/rpmbuild/RPMS/x86_64/aws-ec2logshipper-0.1.0-1.x86_64.rpm
+sudo systemctl enable aws-ec2logshipper
+sudo systemctl start aws-ec2logshipper
+sudo systemctl status aws-ec2logshipper
 ```
 
 The RPM installs:
 
 - `/usr/bin/ec2logshipper`
-- `/usr/lib/systemd/system/search-tool-ec2logshipper.service`
-- `/etc/search-tool-ec2logshipper/config.json`
+- `/usr/lib/systemd/system/aws-ec2logshipper.service`
+- `/etc/aws-ec2logshipper/config.json`
 
 ## Configuration
 

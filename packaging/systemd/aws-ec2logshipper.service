@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/ec2logshipper -config /etc/search-tool-ec2logshipper/config.json
+ExecStart=/usr/bin/ec2logshipper -config /etc/aws-ec2logshipper/config.json
 Restart=on-failure
 User=root
 

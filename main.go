@@ -1,4 +1,4 @@
-// search-tool-ec2logshipper tails a local log file and forwards each line to AWS CloudWatch Logs.
+// aws-ec2logshipper tails a local log file and forwards each line to AWS CloudWatch Logs.
 package main
 
 import (
@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "/etc/search-tool-ec2logshipper/config.json", "path to JSON config")
+	configPath := flag.String("config", "/etc/aws-ec2logshipper/config.json", "path to JSON config")
 	flag.Parse()
 
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelInfo})))

@@ -1,5 +1,5 @@
 # Project metadata
-NAME := search-tool-ec2logshipper
+NAME := aws-ec2logshipper
 BINARY := ec2logshipper
 # The VERSION file is the single source of truth for both the binary and the RPM.
 VERSION := $(shell cat VERSION)
