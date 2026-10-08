@@ -20,11 +20,23 @@ func main() {
 
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelInfo})))
 
+	slog.Info("starting aws-ec2logshipper", "config_path", *configPath)
 	cfg, err := LoadConfig(*configPath)
 	if err != nil {
 		slog.Error("load config", "error", err)
 		os.Exit(1)
 	}
+	slog.Info("configuration loaded",
+		"log_file", cfg.LogFile,
+		"log_group", cfg.LogGroup,
+		"region", cfg.Region,
+		"timestamp_layout", cfg.TimestampLayout,
+		"timestamp_regex", cfg.TimestampRegex,
+		"batch_max_size", cfg.BatchMaxSize,
+		"flush_interval_ms", cfg.FlushIntervalMs,
+		"create_log_group", cfg.CreateLogGroup,
+		"create_log_stream", cfg.CreateLogStream,
+	)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -39,14 +51,19 @@ func main() {
 
 	stream := cfg.LogStream
 	if stream == "" {
+		slog.Info("log stream is empty; resolving EC2 instance ID via IMDSv2")
 		id, err := getInstanceID(ctx)
 		if err != nil {
 			slog.Error("get instance id", "error", err)
 			os.Exit(1)
 		}
 		stream = id
+		slog.Info("using EC2 instance ID as log stream", "log_stream", stream)
+	} else {
+		slog.Info("using configured log stream", "log_stream", stream)
 	}
 
+	slog.Info("configuring CloudWatch Logs client", "region", cfg.Region, "log_group", cfg.LogGroup, "log_stream", stream)
 	cw, err := NewCWClient(ctx, cfg.Region, cfg.LogGroup, stream, cfg.CreateLogGroup, cfg.CreateLogStream)
 	if err != nil {
 		slog.Error("cloudwatch client", "error", err)
@@ -56,15 +73,18 @@ func main() {
 		slog.Error("ensure log group/stream", "error", err)
 		os.Exit(1)
 	}
+	slog.Info("CloudWatch Logs setup completed", "create_log_group", cfg.CreateLogGroup, "create_log_stream", cfg.CreateLogStream)
 
 	parser, err := NewParser(cfg.TimestampLayout, cfg.TimestampRegex)
 	if err != nil {
 		slog.Error("parser", "error", err)
 		os.Exit(1)
 	}
+	slog.Info("timestamp parser configured", "layout", cfg.TimestampLayout, "regex", cfg.TimestampRegex)
 
 	lines := make(chan string, 1000)
 	tailer := NewTailer(cfg.LogFile, lines)
+	slog.Info("starting log file tailer", "path", cfg.LogFile, "batch_max_size", cfg.BatchMaxSize, "flush_interval_ms", cfg.FlushIntervalMs)
 
 	go func() {
 		if err := tailer.Run(ctx); err != nil {

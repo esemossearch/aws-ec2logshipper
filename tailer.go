@@ -46,11 +46,13 @@ func (t *Tailer) open() error {
 	}
 	t.ino = s.Ino
 
-	if _, err := f.Seek(0, io.SeekEnd); err != nil {
+	offset, err := f.Seek(0, io.SeekEnd)
+	if err != nil {
 		f.Close()
 		return err
 	}
 
+	slog.Info("log file opened; existing content will be skipped", "path", t.path, "start_offset", offset)
 	t.file = f
 	t.sc = bufio.NewScanner(f)
 	t.sc.Buffer(make([]byte, 4096), 1024*1024)
