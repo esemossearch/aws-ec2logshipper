@@ -97,6 +97,9 @@ func (t *Tailer) Run(ctx context.Context) error {
 			}
 			return err
 		}
+
+		t.sc = bufio.NewScanner(t.file)
+		t.sc.Buffer(make([]byte, 4096), 1024*1024)
 	}
 }
 
