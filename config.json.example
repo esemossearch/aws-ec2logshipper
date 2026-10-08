@@ -1,5 +1,6 @@
 {
   "log_file": "/var/log/messages",
+  "log_file_mode": "latest",
   "log_group": "/ec2/application",
   "log_stream": "",
   "timestamp_layout": "Jan 02 15:04:05",

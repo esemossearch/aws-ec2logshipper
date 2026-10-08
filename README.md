@@ -95,7 +95,8 @@ The `config.json` fields are:
 
 | Field | Default | Description |
 |---|---|---|
-| `log_file` | `/var/log/messages` | Path to the local log file to tail. |
+| `log_file` | `/var/log/messages` | Path or glob pattern for local log files, for example `/var/log/app-*.log`. |
+| `log_file_mode` | `latest` | `latest` follows the newest match; `all` follows every match. |
 | `log_group` | `/ec2/application` | CloudWatch Logs group name. |
 | `log_stream` | `""` | Stream name; empty means use the EC2 instance ID. |
 | `timestamp_layout` | `"Jan 02 15:04:05"` | Go time layout for parsing the timestamp. |
@@ -107,14 +108,12 @@ The `config.json` fields are:
 | `create_log_group` | `true` | Create the log group if it does not exist. |
 | `create_log_stream` | `true` | Create the log stream if it does not exist. |
 
-## Continuous Integration
-
-A GitHub Actions workflow in `.github/workflows/rpm.yml` builds the RPM
-automatically whenever a `v*` Git tag is pushed. The tag without its leading
-`v` must match `VERSION`. Binary and source RPMs are uploaded as workflow
-artifacts and attached to the corresponding GitHub Release for durable
-downloads by EC2 instances. The workflow can also be run manually to produce
-workflow artifacts without creating a release.
+Glob patterns use Go's `filepath.Match` syntax, including `*`, `?`, and character
+classes such as `[0-9]`. In `latest` mode the most recently modified match is
+followed and the shipper switches when a newer file appears. In `all` mode every
+matching file is followed. If no file matches, the shipper waits until one is
+created. Existing content is skipped only for files found during startup; files
+that appear later are read from the beginning.
 
 ## Development
 

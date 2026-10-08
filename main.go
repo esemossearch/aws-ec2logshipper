@@ -28,6 +28,7 @@ func main() {
 	}
 	slog.Info("configuration loaded",
 		"log_file", cfg.LogFile,
+		"log_file_mode", cfg.LogFileMode,
 		"log_group", cfg.LogGroup,
 		"region", cfg.Region,
 		"timestamp_layout", cfg.TimestampLayout,
@@ -83,8 +84,8 @@ func main() {
 	slog.Info("timestamp parser configured", "layout", cfg.TimestampLayout, "regex", cfg.TimestampRegex)
 
 	lines := make(chan string, 1000)
-	tailer := NewTailer(cfg.LogFile, lines)
-	slog.Info("starting log file tailer", "path", cfg.LogFile, "batch_max_size", cfg.BatchMaxSize, "flush_interval_ms", cfg.FlushIntervalMs)
+	tailer := NewTailer(cfg.LogFile, cfg.LogFileMode, lines)
+	slog.Info("starting log file tailer", "pattern", cfg.LogFile, "mode", cfg.LogFileMode, "batch_max_size", cfg.BatchMaxSize, "flush_interval_ms", cfg.FlushIntervalMs)
 
 	go func() {
 		if err := tailer.Run(ctx); err != nil {

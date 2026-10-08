@@ -8,7 +8,8 @@ import (
 
 // Config holds the JSON configuration for the EC2 log shipper.
 type Config struct {
-	LogFile         string `json:"log_file"`          // Local log file to tail.
+	LogFile         string `json:"log_file"`          // Local log file or glob pattern to tail.
+	LogFileMode     string `json:"log_file_mode"`     // Match mode: latest or all.
 	LogGroup        string `json:"log_group"`         // CloudWatch Logs group name.
 	LogStream       string `json:"log_stream"`        // CloudWatch Logs stream name (empty means use instance ID).
 	TimestampLayout string `json:"timestamp_layout"`  // Go time layout for parsing timestamps.
@@ -23,6 +24,9 @@ type Config struct {
 
 // Defaults fills in zero values that should use a built-in default.
 func (c *Config) Defaults() {
+	if c.LogFileMode == "" {
+		c.LogFileMode = "latest"
+	}
 	if c.BatchMaxSize <= 0 {
 		c.BatchMaxSize = 100
 	}
@@ -38,6 +42,9 @@ func (c *Config) Defaults() {
 func (c *Config) Validate() error {
 	if c.LogFile == "" {
 		return errors.New("log_file is required")
+	}
+	if c.LogFileMode != "latest" && c.LogFileMode != "all" {
+		return errors.New("log_file_mode must be latest or all")
 	}
 	if c.LogGroup == "" {
 		return errors.New("log_group is required")
